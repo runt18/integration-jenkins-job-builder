@@ -685,7 +685,7 @@ def copy_to_slave(parser, xml_parent, data):
     rel = str(data.get('relative-to', 'userContent'))
     opt = ('home', 'somewhereElse', 'userContent', 'workspace')
     if rel not in opt:
-        raise ValueError('relative-to must be one of %r' % opt)
+        raise ValueError('relative-to must be one of {0!r}'.format(opt))
     XML.SubElement(cs, 'relativeTo').text = rel
 
     # seems to always be false, can't find it in source code
@@ -1431,8 +1431,8 @@ def credentials_binding(parser, xml_parent, data):
     for binding in data:
         for binding_type, params in binding.items():
             if binding_type not in binding_types.keys():
-                raise JenkinsJobsException('binding-type must be one of %r' %
-                                           binding_types.keys())
+                raise JenkinsJobsException('binding-type must be one of {0!r}'.format(
+                                           binding_types.keys()))
 
             binding_xml = XML.SubElement(bindings_xml,
                                          binding_types[binding_type])

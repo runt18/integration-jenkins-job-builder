@@ -362,7 +362,7 @@ def extended_choice(parser, xml_parent, data):
     `extended-choice` option in the parameter section of the job configuration
     instead.
     """
-    logger = logging.getLogger("%s:extended_choice" % __name__)
+    logger = logging.getLogger("{0!s}:extended_choice".format(__name__))
     logger.warn('Use of the extended-choice property is deprecated.  You '
                 'should use the extended-choice option in the parameter '
                 'section instead.')

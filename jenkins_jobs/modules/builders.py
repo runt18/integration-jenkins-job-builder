@@ -249,7 +249,7 @@ def ant(parser, xml_parent, data):
             properties = data['properties']
             prop_string = ''
             for prop, val in properties.items():
-                prop_string += "%s=%s\n" % (prop, val)
+                prop_string += "{0!s}={1!s}\n".format(prop, val)
             prop_element = XML.SubElement(ant, 'properties')
             prop_element.text = prop_string
         if setting == 'java-opts':
@@ -1592,8 +1592,7 @@ def multijob(parser, xml_parent, data):
     condition = data.get('condition', 'SUCCESSFUL')
     conditions_available = ('SUCCESSFUL', 'UNSTABLE', 'COMPLETED', 'FAILURE')
     if condition not in conditions_available:
-        raise JenkinsJobsException('Multijob condition must be one of: %s.'
-                                   % ', '.join(conditions_available))
+        raise JenkinsJobsException('Multijob condition must be one of: {0!s}.'.format(', '.join(conditions_available)))
     XML.SubElement(builder, 'continuationCondition').text = condition
 
     phaseJobs = XML.SubElement(builder, 'phaseJobs')
@@ -1966,8 +1965,7 @@ def shining_panda(parser, xml_parent, data):
     if buildenv not in envs:
         raise InvalidAttributeError('build-environment', buildenv, envs)
 
-    t = XML.SubElement(xml_parent, '%s%s' %
-                       (pluginelementpart, buildenvdict[buildenv]))
+    t = XML.SubElement(xml_parent, '{0!s}{1!s}'.format(pluginelementpart, buildenvdict[buildenv]))
 
     if buildenv in ('python', 'virtualenv'):
         XML.SubElement(t, 'pythonName').text = data.get("python-version",
@@ -2314,7 +2312,7 @@ def ssh_builder(parser, xml_parent, data):
         XML.SubElement(builder, 'siteName').text = str(data['ssh-user-ip'])
         XML.SubElement(builder, 'command').text = str(data['command'])
     except KeyError as e:
-        raise MissingAttributeError("'%s'" % e.args[0])
+        raise MissingAttributeError("'{0!s}'".format(e.args[0]))
 
 
 def sonar(parser, xml_parent, data):

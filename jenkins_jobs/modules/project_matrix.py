@@ -146,8 +146,7 @@ class Matrix(jenkins_jobs.modules.base.Base):
 
         if strategy not in self.supported_strategies:
             raise ValueError(
-                'Given strategy %s. Only %s strategies are supported'
-                % (strategy, self.supported_strategies.keys()))
+                'Given strategy {0!s}. Only {1!s} strategies are supported'.format(strategy, self.supported_strategies.keys()))
 
         ex_r = XML.SubElement(
             root, 'executionStrategy',
@@ -198,8 +197,7 @@ class Matrix(jenkins_jobs.modules.base.Base):
             axis = axis_['axis']
             axis_type = axis['type']
             if axis_type not in self.supported_axis:
-                raise ValueError('Only %s axes types are supported'
-                                 % self.supported_axis.keys())
+                raise ValueError('Only {0!s} axes types are supported'.format(self.supported_axis.keys()))
             axis_name = self.supported_axis.get(axis_type)
             lbl_root = XML.SubElement(ax_root, axis_name)
             name, values = axis.get('name', ''), axis.get('values', [''])

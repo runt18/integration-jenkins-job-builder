@@ -23,7 +23,7 @@ class ModuleError(JenkinsJobsException):
             # XML generation called via dispatch
             if co_name == 'dispatch':
                 data = frame.f_locals
-                module_name = "%s.%s" % (data['component_type'], data['name'])
+                module_name = "{0!s}.{1!s}".format(data['component_type'], data['name'])
                 break
             # XML generation done directly by class using gen_xml
             if co_name == 'gen_xml':

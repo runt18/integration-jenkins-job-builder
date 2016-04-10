@@ -73,7 +73,7 @@ def archive(parser, xml_parent, data):
     .. literalinclude::  /../../tests/publishers/fixtures/archive001.yaml
        :language: yaml
     """
-    logger = logging.getLogger("%s:archive" % __name__)
+    logger = logging.getLogger("{0!s}:archive".format(__name__))
     archiver = XML.SubElement(xml_parent, 'hudson.tasks.ArtifactArchiver')
     artifacts = XML.SubElement(archiver, 'artifacts')
     artifacts.text = data['artifacts']
@@ -165,8 +165,7 @@ def jclouds(parser, xml_parent, data):
         XML.SubElement(deployer_entry, 'path').text = data.get('basedir', '')
         XML.SubElement(deployer_entry, 'sourceFile').text = data['files']
     except KeyError as e:
-        raise JenkinsJobsException("blobstore requires '%s' to be set"
-                                   % e.args[0])
+        raise JenkinsJobsException("blobstore requires '{0!s}' to be set".format(e.args[0]))
 
     XML.SubElement(deployer_entry, 'keepHierarchy').text = str(
         data.get('hierarchy', False)).lower()
@@ -522,8 +521,8 @@ def trigger(parser, xml_parent, data):
     threshold = data.get('threshold', 'SUCCESS')
     supported_thresholds = ['SUCCESS', 'UNSTABLE', 'FAILURE']
     if threshold not in supported_thresholds:
-        raise JenkinsJobsException("threshold must be one of %s" %
-                                   ", ".join(supported_thresholds))
+        raise JenkinsJobsException("threshold must be one of {0!s}".format(
+                                   ", ".join(supported_thresholds)))
     tname = XML.SubElement(tthreshold, 'name')
     tname.text = hudson_model.THRESHOLDS[threshold]['name']
     tordinal = XML.SubElement(tthreshold, 'ordinal')
@@ -1239,13 +1238,13 @@ def xunit(parser, xml_parent, data):
             logger.warn(
                 "Unrecognized threshold, should be 'failed' or 'skipped'")
             continue
-        elname = ("org.jenkinsci.plugins.xunit.threshold.%sThreshold" %
-                  next(iter(t.keys())).title())
+        elname = ("org.jenkinsci.plugins.xunit.threshold.{0!s}Threshold".format(
+                  next(iter(t.keys())).title()))
         el = XML.SubElement(xmlthresholds, elname)
         for threshold_name, threshold_value in next(iter(t.values())).items():
             # Normalize and craft the element name for this threshold
-            elname = "%sThreshold" % threshold_name.lower().replace(
-                'new', 'New')
+            elname = "{0!s}Threshold".format(threshold_name.lower().replace(
+                'new', 'New'))
             XML.SubElement(el, elname).text = str(threshold_value)
 
     # Whether to use percent of exact number of tests.
@@ -1849,8 +1848,7 @@ def email_ext(parser, xml_parent, data):
     }
     ctype = data.get('content-type', 'default')
     if ctype not in content_type_mime:
-        raise JenkinsJobsException('email-ext content type must be one of: %s'
-                                   % ', '.join(content_type_mime.keys()))
+        raise JenkinsJobsException('email-ext content type must be one of: {0!s}'.format(', '.join(content_type_mime.keys())))
     XML.SubElement(emailext, 'contentType').text = content_type_mime[ctype]
 
     XML.SubElement(emailext, 'defaultSubject').text = data.get(
@@ -2102,7 +2100,7 @@ def groovy_postbuild(parser, xml_parent, data):
         /../../tests/publishers/fixtures/groovy-postbuild001.yaml
        :language: yaml
     """
-    logger = logging.getLogger("%s:groovy-postbuild" % __name__)
+    logger = logging.getLogger("{0!s}:groovy-postbuild".format(__name__))
     # Backward compatibility with old format
     if isinstance(data, six.string_types):
         logger.warn(
@@ -2573,7 +2571,7 @@ def workspace_cleanup(parser, xml_parent, data):
         XML.SubElement(p, v).text = str(cdict.pop(k, True)).lower()
 
     if len(cdict) > 0:
-        raise ValueError('clean-if must be one of: %r' % list(mask.keys()))
+        raise ValueError('clean-if must be one of: {0!r}'.format(list(mask.keys())))
 
     if str(data.get("fail-build", False)).lower() == 'false':
         XML.SubElement(p, 'notFailBuild').text = 'true'
@@ -2852,8 +2850,8 @@ def rich_text_publisher(parser, xml_parent, data):
     parsers = ['HTML', 'Confluence', 'WikiText']
     parser_name = data['parser-name']
     if parser_name not in parsers:
-        raise JenkinsJobsException('parser-name must be one of: %s' %
-                                   ", ".join(parsers))
+        raise JenkinsJobsException('parser-name must be one of: {0!s}'.format(
+                                   ", ".join(parsers)))
 
     reporter = XML.SubElement(
         xml_parent,
@@ -3093,8 +3091,8 @@ def postbuildscript(parser, xml_parent, data):
         execute_on = data['execute-on'].lower()
         if execute_on not in valid_values:
             raise JenkinsJobsException(
-                'execute-on must be one of %s, got %s' %
-                valid_values, execute_on
+                'execute-on must be one of {0!s}, got {1!s}'.format(*
+                valid_values), execute_on
             )
         execute_on_xml = XML.SubElement(pbs_xml, 'executeOn')
         execute_on_xml.text = execute_on.upper()
@@ -3333,12 +3331,12 @@ def warnings(parser, xml_parent, data):
     XML.SubElement(warnings, 'thresholdLimit').text = prioritiesDict[priority]
     td = XML.SubElement(warnings, 'thresholds')
     for base in ["total", "new"]:
-        thresholds = data.get("%s-thresholds" % base, {})
+        thresholds = data.get("{0!s}-thresholds".format(base), {})
         for status in ["unstable", "failed"]:
             bystatus = thresholds.get(status, {})
             for level in ["all", "high", "normal", "low"]:
-                val = str(bystatus.get("%s-%s" % (base, level), ''))
-                XML.SubElement(td, "%s%s%s" % (status,
+                val = str(bystatus.get("{0!s}-{1!s}".format(base, level), ''))
+                XML.SubElement(td, "{0!s}{1!s}{2!s}".format(status,
                                base.capitalize(), level.capitalize())
                                ).text = val
     if data.get('new-thresholds'):
@@ -3600,7 +3598,7 @@ def plot(parser, xml_parent, data):
         XML.SubElement(plugin, 'title').text = plot.get('title', '')
         XML.SubElement(plugin, 'yaxis').text = plot['yaxis']
         XML.SubElement(plugin, 'csvFileName').text = \
-            plot.get('csv-file-name', '%s.csv' % random.randrange(2 << 32))
+            plot.get('csv-file-name', '{0!s}.csv'.format(random.randrange(2 << 32)))
         topseries = XML.SubElement(plugin, 'series')
         series = plot['series']
         for serie in series:
@@ -3735,7 +3733,7 @@ def git(parser, xml_parent, data):
             opt, xmlopt, default_val = prop[:3]
             val = entity.get(opt, default_val)
             if val is None:
-                raise JenkinsJobsException('Required option missing: %s' % opt)
+                raise JenkinsJobsException('Required option missing: {0!s}'.format(opt))
             if type(val) == bool:
                 val = str(val).lower()
             XML.SubElement(entity_xml, xmlopt).text = val
@@ -4283,11 +4281,11 @@ def valgrind(parser, xml_parent, data):
     for threshold in ['unstable', 'failed']:
         dthreshold = dthresholds.get(threshold, {})
         threshold = threshold.replace('failed', 'fail')
-        XML.SubElement(p, '%sThresholdInvalidReadWrite' % threshold).text \
+        XML.SubElement(p, '{0!s}ThresholdInvalidReadWrite'.format(threshold)).text \
             = str(dthreshold.get('invalid-read-write', ''))
-        XML.SubElement(p, '%sThresholdDefinitelyLost' % threshold).text \
+        XML.SubElement(p, '{0!s}ThresholdDefinitelyLost'.format(threshold)).text \
             = str(dthreshold.get('definitely-lost', ''))
-        XML.SubElement(p, '%sThresholdTotal' % threshold).text \
+        XML.SubElement(p, '{0!s}ThresholdTotal'.format(threshold)).text \
             = str(dthreshold.get('total', ''))
 
     XML.SubElement(p, 'failBuildOnMissingReports').text = str(
@@ -4553,8 +4551,8 @@ def downstream_ext(parser, xml_parent, data):
     criteria = data.get('criteria', 'success').upper()
 
     if criteria not in hudson_model.THRESHOLDS:
-        raise JenkinsJobsException("criteria must be one of %s" %
-                                   ", ".join(hudson_model.THRESHOLDS.keys()))
+        raise JenkinsJobsException("criteria must be one of {0!s}".format(
+                                   ", ".join(hudson_model.THRESHOLDS.keys())))
 
     wr_threshold = hudson_model.THRESHOLDS[
         criteria]
@@ -4566,8 +4564,8 @@ def downstream_ext(parser, xml_parent, data):
 
     condition = data.get('condition', 'equal-or-over')
     if condition not in conditions:
-        raise JenkinsJobsException('condition must be one of: %s' %
-                                   ", ".join(conditions))
+        raise JenkinsJobsException('condition must be one of: {0!s}'.format(
+                                   ", ".join(conditions)))
 
     XML.SubElement(p, 'thresholdStrategy').text = conditions[
         condition]
@@ -4731,8 +4729,8 @@ def conditional_publisher(parser, xml_parent, data):
             wr_name = cdata['condition-worst']
             if wr_name not in hudson_model.THRESHOLDS:
                 raise JenkinsJobsException(
-                    "threshold must be one of %s" %
-                    ", ".join(hudson_model.THRESHOLDS.keys()))
+                    "threshold must be one of {0!s}".format(
+                    ", ".join(hudson_model.THRESHOLDS.keys())))
             wr_threshold = hudson_model.THRESHOLDS[wr_name]
             XML.SubElement(wr, "name").text = wr_threshold['name']
             XML.SubElement(wr, "ordinal").text = wr_threshold['ordinal']
@@ -4744,8 +4742,8 @@ def conditional_publisher(parser, xml_parent, data):
             br_name = cdata['condition-best']
             if br_name not in hudson_model.THRESHOLDS:
                 raise JenkinsJobsException(
-                    "threshold must be one of %s" %
-                    ", ".join(hudson_model.THRESHOLDS.keys()))
+                    "threshold must be one of {0!s}".format(
+                    ", ".join(hudson_model.THRESHOLDS.keys())))
             br_threshold = hudson_model.THRESHOLDS[br_name]
             XML.SubElement(br, "name").text = br_threshold['name']
             XML.SubElement(br, "ordinal").text = br_threshold['ordinal']
@@ -5345,8 +5343,8 @@ def flowdock(parser, xml_parent, data):
             data.get(data_item, default)).lower()
 
     def gen_setting(item, default):
-        XML.SubElement(parent, 'notify%s' % item).text = str(
-            data.get('notify-%s' % item.lower(), default)).lower()
+        XML.SubElement(parent, 'notify{0!s}'.format(item)).text = str(
+            data.get('notify-{0!s}'.format(item.lower()), default)).lower()
 
     # Raise exception if token was not specified
     if 'token' not in data:

@@ -128,7 +128,7 @@ class OrderedConstructor(BaseConstructor):
         else:
             raise yaml.constructor.ConstructorError(
                 None, None,
-                'expected a mapping node, but found %s' % node.id,
+                'expected a mapping node, but found {0!s}'.format(node.id),
                 node.start_mark)
 
         mapping = OrderedDict()
@@ -139,7 +139,7 @@ class OrderedConstructor(BaseConstructor):
             except TypeError as exc:
                 raise yaml.constructor.ConstructorError(
                     'while constructing a mapping', node.start_mark,
-                    'found unacceptable key (%s)' % exc, key_node.start_mark)
+                    'found unacceptable key ({0!s})'.format(exc), key_node.start_mark)
             value = self.construct_object(value_node, deep=False)
             mapping[key] = value
         data.update(mapping)

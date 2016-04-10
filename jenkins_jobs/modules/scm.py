@@ -188,7 +188,7 @@ def git(parser, xml_parent, data):
         https://www.visualstudio.com/en-us/products/tfs-overview-vs.aspx
 
     """
-    logger = logging.getLogger("%s:git" % __name__)
+    logger = logging.getLogger("{0!s}:git".format(__name__))
 
     # XXX somebody should write the docs for those with option name =
     # None so we have a sensible name/key for it.
@@ -276,8 +276,8 @@ def git(parser, xml_parent, data):
         choosing_strategy = choosing_strategies[data.get('choosing-strategy',
                                                          'default')]
     except KeyError:
-        raise ValueError('Invalid choosing-strategy %r' %
-                         data.get('choosing-strategy'))
+        raise ValueError('Invalid choosing-strategy {0!r}'.format(
+                         data.get('choosing-strategy')))
     XML.SubElement(scm, 'buildChooser', {'class': choosing_strategy})
 
     for elem in mapping:
@@ -1027,8 +1027,8 @@ def hg(self, xml_parent, data):
     try:
         revision_type = revision_type_dict[data.get('revision-type', 'branch')]
     except KeyError:
-        raise JenkinsJobsException('Invalid revision-type %r' %
-                                   data.get('revision-type'))
+        raise JenkinsJobsException('Invalid revision-type {0!r}'.format(
+                                   data.get('revision-type')))
     XML.SubElement(scm, 'revisionType').text = revision_type
 
     XML.SubElement(scm, 'revision').text = data.get('revision', 'default')
