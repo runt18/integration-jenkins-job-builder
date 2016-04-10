@@ -120,7 +120,7 @@ class ModuleRegistry(object):
 
     def dispatch(self, component_type,
                  parser, xml_parent,
-                 component, template_data={}):
+                 component, template_data=None):
         """This is a method that you can call from your implementation of
         Base.gen_xml or component.  It allows modules to define a type
         of component, and benefit from extensibility via Python
@@ -139,6 +139,8 @@ class ModuleRegistry(object):
         See the Publishers module for a simple example of how to use
         this method.
         """
+        if template_data is None:
+            template_data = {}
 
         if component_type not in self.modules_by_component_type:
             raise JenkinsJobsException("Unknown component type: "
