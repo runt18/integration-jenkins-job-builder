@@ -73,13 +73,13 @@ def recurse_path(root, excludes=None):
     for root, dirs, files in os.walk(basepath, topdown=True):
         dirs[:] = [
             d for d in dirs
-            if not any([fnmatch.fnmatch(d, pattern) for pattern in patterns])
-            if not any([fnmatch.fnmatch(os.path.abspath(os.path.join(root, d)),
+            if not any( fnmatch.fnmatch(d, pattern) for pattern in patterns)
+            if not any( fnmatch.fnmatch(os.path.abspath(os.path.join(root, d)),
                                         path)
-                        for path in absolute])
-            if not any([fnmatch.fnmatch(os.path.relpath(os.path.join(root, d)),
+                        for path in absolute)
+            if not any( fnmatch.fnmatch(os.path.relpath(os.path.join(root, d)),
                                         path)
-                        for path in relative])
+                        for path in relative)
         ]
         pathlist.extend([os.path.join(root, path) for path in dirs])
 
