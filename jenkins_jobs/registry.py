@@ -184,8 +184,8 @@ class ModuleRegistry(object):
                     # extract entry point based on docstring
                     name_line = func_ep.__doc__.split('\n')
                     if not name_line[0].startswith('yaml:'):
-                        logger.debug("Ignoring '%s' as an entry point" %
-                                     name_line)
+                        logger.debug("Ignoring '{0!s}' as an entry point".format(
+                                     name_line))
                         continue
                     ep_name = name_line[0].split(' ')[1]
                 except (AttributeError, IndexError):
@@ -193,8 +193,7 @@ class ModuleRegistry(object):
                     # a string to have split called on it.
                     # IndexError raised by name_line not containing anything
                     # after the 'yaml:' string.
-                    logger.debug("Not including func '%s' as an entry point"
-                                 % func_ep.__name__)
+                    logger.debug("Not including func '{0!s}' as an entry point".format(func_ep.__name__))
                     continue
 
                 module_eps.append(
@@ -202,8 +201,7 @@ class ModuleRegistry(object):
                         ep_name, entry_point.module_name,
                         dist=entry_point.dist, attrs=(func_ep.__name__,)))
                 logger.debug(
-                    "Adding auto EP '%s=%s:%s'" %
-                    (ep_name, entry_point.module_name, func_ep.__name__))
+                    "Adding auto EP '{0!s}={1!s}:{2!s}'".format(ep_name, entry_point.module_name, func_ep.__name__))
 
             # load from explicitly defined entry points
             module_eps.extend(list(pkg_resources.iter_entry_points(

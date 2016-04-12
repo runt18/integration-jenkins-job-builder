@@ -59,8 +59,8 @@ def http_endpoint(parser, xml_parent, data):
     format = data.get('format', 'JSON').upper()
     if format not in supported_formats:
         raise JenkinsJobsException(
-            "format must be one of %s" %
-            ", ".join(supported_formats))
+            "format must be one of {0!s}".format(
+            ", ".join(supported_formats)))
     else:
         XML.SubElement(endpoint_element, 'format').text = format
 
@@ -70,8 +70,8 @@ def http_endpoint(parser, xml_parent, data):
     event = data.get('event', 'all').lower()
     if event not in supported_events:
         raise JenkinsJobsException(
-            "event must be one of %s" %
-            ", ".join(supported_events))
+            "event must be one of {0!s}".format(
+            ", ".join(supported_events)))
     else:
         XML.SubElement(endpoint_element, 'event').text = event
 

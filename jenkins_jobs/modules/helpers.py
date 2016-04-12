@@ -79,8 +79,8 @@ def build_trends_publisher(plugin_name, xml_element, data):
                 config_value,
                 data.get('dont-compute-new', True))
         elif key == 'health-threshold' and config_value not in thresholds:
-            raise JenkinsJobsException("health-threshold must be one of %s" %
-                                       ", ".join(thresholds))
+            raise JenkinsJobsException("health-threshold must be one of {0!s}".format(
+                                       ", ".join(thresholds)))
         else:
             if isinstance(default, bool):
                 xml_config.text = str(config_value).lower()

@@ -51,7 +51,7 @@ def gerrit_handle_legacy_configuration(data):
     def hyphenize(attr):
         """Convert strings like triggerOn to trigger-on.
         """
-        return hyphenizer.sub(lambda x: "-%s" % x.group(0).lower(),
+        return hyphenizer.sub(lambda x: "-{0!s}".format(x.group(0).lower()),
                               attr)
 
     def convert_dict(d, old_keys):
@@ -146,13 +146,13 @@ def build_gerrit_triggers(xml_parent, data):
                        "known: %s.") % (event, known)
                 raise JenkinsJobsException(msg)
             XML.SubElement(trigger_on_events,
-                           '%s.%s' % (tag_namespace, tag_name))
+                           '{0!s}.{1!s}'.format(tag_namespace, tag_name))
         else:
             if 'patchset-created-event' in event.keys():
                 pce = event['patchset-created-event']
                 pc = XML.SubElement(
                     trigger_on_events,
-                    '%s.%s' % (tag_namespace, 'PluginPatchsetCreatedEvent'))
+                    '{0!s}.{1!s}'.format(tag_namespace, 'PluginPatchsetCreatedEvent'))
                 XML.SubElement(pc, 'excludeDrafts').text = str(
                     pce.get('exclude-drafts', False)).lower()
                 XML.SubElement(pc, 'excludeTrivialRebase').text = str(
@@ -164,7 +164,7 @@ def build_gerrit_triggers(xml_parent, data):
                 comment_added_event = event['comment-added-event']
                 cadded = XML.SubElement(
                     trigger_on_events,
-                    '%s.%s' % (tag_namespace, 'PluginCommentAddedEvent'))
+                    '{0!s}.{1!s}'.format(tag_namespace, 'PluginCommentAddedEvent'))
                 XML.SubElement(cadded, 'verdictCategory').text = \
                     comment_added_event['approval-category']
                 XML.SubElement(
@@ -176,7 +176,7 @@ def build_gerrit_triggers(xml_parent, data):
                 comment_added_event = event['comment-added-contains-event']
                 caddedc = XML.SubElement(
                     trigger_on_events,
-                    '%s.%s' % (tag_namespace,
+                    '{0!s}.{1!s}'.format(tag_namespace,
                                'PluginCommentAddedContainsEvent'))
                 XML.SubElement(caddedc, 'commentAddedCommentContains').text = \
                     comment_added_event['comment-contains-value']
@@ -739,9 +739,8 @@ def pollurl(parser, xml_parent, data):
         for entry in check_content:
             type_name = next(iter(entry.keys()))
             if type_name not in valid_content_types:
-                raise JenkinsJobsException('check-content must be one of : %s'
-                                           % ', '.join(valid_content_types.
-                                                       keys()))
+                raise JenkinsJobsException('check-content must be one of : {0!s}'.format(', '.join(valid_content_types.
+                                                       keys())))
 
             content_type = valid_content_types.get(type_name)
             if entry[type_name]:
@@ -1203,8 +1202,8 @@ def reverse(parser, xml_parent, data):
     result = str(data.get('result', 'success')).upper()
     if result not in supported_thresholds:
         raise jenkins_jobs.errors.JenkinsJobsException(
-            "Choice should be one of the following options: %s." %
-            ", ".join(supported_thresholds))
+            "Choice should be one of the following options: {0!s}.".format(
+            ", ".join(supported_thresholds)))
     XML.SubElement(threshold, 'name').text = \
         hudson_model.THRESHOLDS[result]['name']
     XML.SubElement(threshold, 'ordinal').text = \

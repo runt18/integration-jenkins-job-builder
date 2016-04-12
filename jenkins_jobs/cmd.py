@@ -54,7 +54,7 @@ send-as=Jenkins
 
 
 def confirm(question):
-    answer = input('%s (Y/N): ' % question).upper().strip()
+    answer = input('{0!s} (Y/N): '.format(question)).upper().strip()
     if not answer == 'Y':
         sys.exit('Aborted')
 
@@ -352,8 +352,8 @@ def execute(options, config):
 
 
 def version():
-    return "Jenkins Job Builder version: %s" % \
-        jenkins_jobs.version.version_info.version_string()
+    return "Jenkins Job Builder version: {0!s}".format( \
+        jenkins_jobs.version.version_info.version_string())
 
 
 if __name__ == '__main__':

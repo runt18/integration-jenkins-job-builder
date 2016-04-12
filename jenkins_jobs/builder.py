@@ -109,8 +109,8 @@ class CacheStorage(object):
                                    "exit: %s" % (self.cachefilename, e))
             else:
                 self._logger.info("Cache saved")
-                self._logger.debug("Cache written out to '%s'" %
-                                   self.cachefilename)
+                self._logger.debug("Cache written out to '{0!s}'".format(
+                                   self.cachefilename))
 
     def __del__(self):
         self.save()
@@ -305,7 +305,7 @@ class Builder(object):
             jobs = [jobs_glob]
 
         if jobs is not None:
-            logger.info("Removing jenkins job(s): %s" % ", ".join(jobs))
+            logger.info("Removing jenkins job(s): {0!s}".format(", ".join(jobs)))
         for job in jobs:
             self.jenkins.delete_job(job)
             if(self.cache.is_cached(job)):
@@ -342,7 +342,7 @@ class Builder(object):
 
         if (output and not hasattr(output, 'write')
                 and not os.path.isdir(output)):
-            logger.info("Creating directory %s" % output)
+            logger.info("Creating directory {0!s}".format(output))
             try:
                 os.makedirs(output)
             except OSError:

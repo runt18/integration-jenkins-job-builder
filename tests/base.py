@@ -121,8 +121,8 @@ class BaseTestCase(LoggingFixture):
             return u""
 
         # Read XML content, assuming it is unicode encoded
-        xml_content = u"%s" % io.open(self.out_filename,
-                                      'r', encoding='utf-8').read()
+        xml_content = u"{0!s}".format(io.open(self.out_filename,
+                                      'r', encoding='utf-8').read())
         return xml_content
 
     def _read_yaml_content(self, filename):
